@@ -1,0 +1,2 @@
+import maya.cmds as cmds
+cm.select(cm.skinCluster(q=True,inf=True))
