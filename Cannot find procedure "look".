@@ -1,0 +1,10 @@
+maya报错Cannot find procedure "look"新错误处理方法
+报错场景
+当某位艺术家的文件大纲视图时候，就会触发该错误  
+
+报错原因
+文件中场景的大纲被编辑了同时selectCommand这个参数指定了look这个程序，这个参数来自outlinerEditor这个命令（有兴趣的自行查看）  
+
+outlinerEditor -edit -selectCommand "" "outlinerPanel1";
+
+或者直接global proc look(){}
