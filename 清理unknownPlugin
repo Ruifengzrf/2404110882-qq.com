@@ -1,0 +1,14 @@
+import pymel.core as pm
+unknownPlugin_list = pm.unknownPlugin( query=True, list=True )
+unknownPlugin_num = len(unknownPlugin_list)
+if unknownPlugin_list:
+    print u"unknownPlugin个数为%s" % unknownPlugin_num
+    for plugin_name in unknownPlugin_list:
+        try:
+            pm.unknownPlugin( plugin_name, remove=True )
+        except Exception as e:
+            print e
+            print plugin_name, u"无法清理"
+    print u"清理完成！"
+else:
+    print u"unknownPlugin个数为0，不需要清理"
