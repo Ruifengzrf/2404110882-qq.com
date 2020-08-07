@@ -1,2 +1,2 @@
-import maya.cmds as cmds
+import maya.cmds as cm
 cm.select(cm.skinCluster(q=True,inf=True))
