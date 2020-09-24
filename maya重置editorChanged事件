@@ -3,3 +3,6 @@ import pymel.core as pm
 for item in pm.lsUI(editors=True):
     if isinstance(item, pm.ui.ModelEditor):
         pm.modelEditor(item, edit=True, editorChanged="")
+
+#
+global proc look(){}
