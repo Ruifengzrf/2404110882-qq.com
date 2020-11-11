@@ -1,0 +1,57 @@
+//
+//OE_KEY_Frame	v1.6;
+//
+global proc OE_KEYFRAME(int $fn)
+	{
+	int $OEKFR=1;
+	if(`checkBox -q -v OE_KF_R`)
+		{$OEKFR=-1;}
+
+	if(`radioButton -q -sl OE_KF_X`)
+		{setKeyframe -v ($OEKFR*0) -time 0 -at rotateX;setKeyframe -v ($OEKFR*$fn) -time 60 -at rotateX;}
+	if(`radioButton -q -sl OE_KF_Y`)
+		{setKeyframe -v ($OEKFR*0) -time 0 -at rotateY;setKeyframe -v ($OEKFR*$fn) -time 60 -at rotateY;}
+	if(`radioButton -q -sl OE_KF_Z`)
+		{setKeyframe -v ($OEKFR*0) -time 0 -at rotateZ;setKeyframe -v ($OEKFR*$fn) -time 60 -at rotateZ;}
+	}
+global proc OE_ROTATE_ZERO()
+	{
+	string $sel[]=`ls -sl -tr`;
+	for($sl in $sel)
+		{
+		if(!(`getAttr -l ($sl+".rx")`))
+			{setAttr ($sl+".rx") 0;}
+		if(!(`getAttr -l ($sl+".ry")`))
+			{setAttr ($sl+".ry") 0;}
+		if(!(`getAttr -l ($sl+".rz")`))
+			{setAttr ($sl+".rz") 0;}}
+	}
+//-------------------------------------------
+{
+if(`window -ex OE_KEY_FRAMEa2`)
+	{deleteUI OE_KEY_FRAMEa2;}
+window -title "KEY_FRAME_v1.6" -sizeable 1 -tlb 1 -bgc 0.25 0.25 0.25 OE_KEY_FRAMEa2;
+	columnLayout -adjustableColumn 1;
+		radioCollection;
+		gridLayout -numberOfColumns 3 -cwh 42 18 -cr 1;
+		    radioButton -label "X" OE_KF_X;
+		    radioButton -label "Y" OE_KF_Y;
+		    radioButton -label "Z" OE_KF_Z;
+		setParent ..;
+		checkBox -label "Reverse" OE_KF_R;
+		gridLayout -numberOfColumns 4 -cwh 32 22 -cr 0;
+			button -label "20" -bgc 0.3 0.1 0.2 -command "OE_KEYFRAME(20)";
+			button -label "45"  -bgc 0.6 0.1 0.2 -command "OE_KEYFRAME(45)";
+			button -label "80" -command "OE_KEYFRAME(80)";
+			button -label "110" -command "OE_KEYFRAME(110)";
+			button -label "30" -command "OE_KEYFRAME(30)";
+			button -label "60" -command "OE_KEYFRAME(60)";
+			button -label "90" -command "OE_KEYFRAME(90)";
+			button -label "120" -command "OE_KEYFRAME(120)";
+		setParent ..;
+		gridLayout -numberOfColumns 2 -cellWidthHeight 64 15;
+			button -label "Delete Key" -h 20 -c "cutKey -time \"-10000:10000\" -clear";
+			button -label "Rotate = 0" -h 30 -c "OE_ROTATE_ZERO";
+window -e -vis 1 -wh 128 96 OE_KEY_FRAMEa2;
+window -e -tlc 0 1440 OE_KEY_FRAMEa2;
+}
