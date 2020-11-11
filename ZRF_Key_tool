@@ -1,0 +1,113 @@
+if(`window -ex ZRF_Key_tool`)
+{deleteUI ZRF_Key_tool;}
+window -t ZRF_Key_tool 
+    -menuBar true
+    -w 250 
+    -h 180 
+    ZRF_Key_tool;  
+menu -label "File" -tearOff true;
+    menuItem -label "New";
+    menuItem -label "Open";
+    menuItem -label "Save";
+    menuItem -divider true;
+    menuItem -label "Quit" -command "deleteUI ZRF_Key_tool";
+menu -label "Help" -helpMenu true;
+    menuItem -label "About me";    
+columnLayout -adjustableColumn true;
+//text -label "\n 你可以用来在绑定角色的时候选中控制器测试旋转变形。\n";
+button -l "Rotate zero"  -h 40 -command "selRo" -bgc 0.1 0.2 0.5;
+button -l "delect Key"   -h 40 -command "dekey" -bgc 0.5 0.2 0.5;
+gridLayout  -numberOfColumns 1 -cellWidthHeight 310 40 ;
+ floatField  XuanZhuanSize;
+ setParent..; setParent..;
+columnLayout -adjustableColumn true;
+radioButtonGrp -numberOfRadioButtons 3  -h 30
+ -labelArray3 "Rotate   X" "Rotate   Y" "Rotate   Z" -select 1 XXZZ ;
+ setParent..;
+ columnLayout -adjustableColumn true;
+button -l "Set   Key"  -h 40 -command "setkey" -bgc 0.1 0.9 0.5;
+
+
+window -e -w 250 -h 180 ZRF_Key_tool;
+showWindow ZRF_Key_tool;
+//旋转归零
+global proc selRo()
+{
+string $selRotate[]=`ls -sl`;
+for($selRotate_a in $selRotate)
+{
+setAttr ($selRotate_a+".rotateZ") 0;
+setAttr ($selRotate_a+".rotateX") 0;
+setAttr ($selRotate_a+".rotateY") 0;
+}
+}
+//删除K帧
+global proc dekey()
+{
+string $dekey[]=`ls -sl`;
+for($dekey_a in $dekey)
+{
+cutKey -cl -t ":" -f ":" -at "rx" -at "ry" -at "rz" $dekey_a;
+}
+}
+//K帧
+global proc setkey()
+{
+
+string $selkey[]=`ls -sl`;
+for ($selkey_a in $selkey)
+{
+    float $XuanZhuan =`floatField -q -v XuanZhuanSize`;
+   float $Timexx =`floatField -q -v XuanZhuanSize`;
+int $XuanZhuanZhouXiang=`radioButtonGrp -q -sl XXZZ`;
+
+if($XuanZhuanZhouXiang==1){
+currentTime 0 ;
+
+setAttr ($selkey_a+".rx") 0;
+
+setKeyframe ($selkey_a+".rx");
+
+
+playbackOptions -min 0 -max $XuanZhuan -ast 0 -aet $XuanZhuan;
+currentTime  $Timexx;
+setAttr ($selkey_a+".rx") $XuanZhuan;
+
+setKeyframe ($selkey_a+".rx");
+
+currentTime 0 ;
+}
+if($XuanZhuanZhouXiang==2){
+currentTime 0 ;
+
+setAttr ($selkey_a+".ry") 0;
+
+setKeyframe ($selkey_a+".ry");
+
+
+playbackOptions -min 0 -max $XuanZhuan -ast 0 -aet $XuanZhuan;
+currentTime  $Timexx;
+setAttr ($selkey_a+".ry") $XuanZhuan;
+
+setKeyframe ($selkey_a+".ry");
+
+currentTime 0 ;
+}
+if($XuanZhuanZhouXiang==3){
+currentTime 0 ;
+
+setAttr ($selkey_a+".rz") 0;
+
+setKeyframe ($selkey_a+".rz");
+
+
+playbackOptions -min 0 -max $XuanZhuan -ast 0 -aet $XuanZhuan;
+currentTime  $Timexx;
+setAttr ($selkey_a+".rz") $XuanZhuan;
+
+setKeyframe ($selkey_a+".rz");
+
+currentTime 0 ;
+}
+}
+}
