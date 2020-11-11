@@ -1,0 +1,122 @@
+##让毛囊的U向位置递增
+import maya.cmds as cmd
+cmd.pickWalk(d="down")
+sel = cmd.ls(sl=True)
+##print(sel)
+add=0
+for i in sel:
+cmd.setAttr( i+".parameterU", add 
+)add += 0.025
+## print(add)
+
+
+#批量锁定模型
+pickWalk -d down;
+string $allpoly[]=`ls -sl`;    
+for($jj in $allpoly)
+{
+setAttr ($jj+".overrideDisplayType") 0;
+}
+
+
+20180819 从今天起记录自己用到的代码
+
+int $x;
+for ($x=1;$x<62;$x++)
+{
+    select -r ("malian_jnt_"+($x));
+    select -add ("loftedSurface1Follicle_"+($x)) ;
+    parent;
+}
+
+int $y;
+for ($y=1;$y<16;$y++)
+{
+    select -r ("lianzi_jntCon_"+($y));
+    select -add ("nurbsPlane"+($y)) ;
+    delete `parentConstraint`;
+}
+
+
+string $jibaa[] = `ls -sl`;
+for ($aa in $jibaa)
+{
+setAttr ($aa+".template") 1;
+}
+
+
+blendShape -w 0 1 -n sds;
+
+
+int $y;
+for ($y=3;$y<16;$y++)
+{
+    select -cl  ;
+    select -r ("cMuscleSurfAttach"+($y));
+    select -add ("toufa_jnta"+($y)) ;
+    parentConstraint -mo -weight 1;
+    select -cl  ;
+}
+
+
+
+global proc  duiweiProc()
+{
+    string $selcon[]=`ls -sl`;
+    CreateLocator;
+    string $selgrp[]=`ls -sl`;
+    select -r $selcon[0] ;
+    select -add $selgrp[0]  ;
+    delete `parentConstraint`;
+    select -cl  ;
+   float $aaa0a01[]=`xform -q -ws -t $selgrp[0]`;
+   ////不同的物体类型后缀不一样 poly是.vtx nurbs是.cv[0:6][0:7] 曲线就是.cv[0:1000]
+   select -r ($selcon[0]+".cv[0:1000]") ;
+    move -r $aaa0a01[0] $aaa0a01[1] $aaa0a01[2] ;
+    select -cl  ;
+    delete $selgrp[0];
+}
+duiweiProc;
+///////查询物体冻结后的坐标
+xform -q -ws -rp  curve1_4_CT;
+
+
+
+调用数组
+//窗口
+if (`window -ex soFangCV`)
+{
+    deleteUI soFangCV;
+}
+
+window 
+    -t "缩放曲线控制器"
+    -h 200
+    -w 50
+soFangCV;
+    columnLayout -adj true;  
+
+        text -l"";
+        text -l "缩放的倍数";
+        floatField  suoFangBeiShui;
+        button -bgc 0.5 0.3 0.8  -l "缩放" -c"suoFangQuXianLinke"; 
+
+
+showWindow soFangCV;
+
+//缩放控制器
+global proc suFangKongZhiQi(float $beishu)
+{
+string $sel[] = `ls - sl`;
+ select -r $sel;
+ selectCurveCV all;
+ scale -r (1*$beishu) (1*$beishu) (1*$beishu);
+ select -r $sel;
+ }
+ 
+//挂钩
+    global proc suoFangQuXianLinke()
+        {
+            float $beishu = `floatField -q -v suoFangBeiShui`;
+            suFangKongZhiQi( $beishu);
+        }
